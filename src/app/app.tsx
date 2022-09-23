@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { test } from '@/libs/test';
+import { test } from '@/libs/mod';
 
 import './assets/styles/main.scss';
 

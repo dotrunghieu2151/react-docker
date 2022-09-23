@@ -1,4 +1,4 @@
-import { test } from './test';
+import { test } from './mod';
 
 describe('test hehe', () => {
   it('SHOULD STH', () => {
