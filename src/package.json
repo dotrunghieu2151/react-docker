@@ -10,7 +10,7 @@
     "lint": "eslint \"{app,libs,test}/**/*.{js,jsx,ts,tsx}\" --fix",
     "format": "prettier --write \"app/**/*.{js,jsx,ts,tsx}\" \"libs/**/*.{js,jsx,ts,tsx}\" \"test/**/*.{js,jsx,ts,tsx}\"",
     "test": "jest",
-    "test:staged": "cross-env CI=true react-scripts test --findRelatedTests",
+    "test:staged": "cross-env CI=true jest --findRelatedTests",
     "analyze-build": "webpack-bundle-analyzer ../dist/stats.json"
   },
   "keywords": [],
@@ -64,6 +64,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.19.0",
+    "cross-env": "^7.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-loadable": "^5.5.0"

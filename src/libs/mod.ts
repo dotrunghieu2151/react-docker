@@ -1,5 +1,5 @@
-export const test = 'test13244';
+export const test = 'test132';
 
 export const hi = 'hi';
 
-export const da: any = 'ha';
+export const da = 'ha';
