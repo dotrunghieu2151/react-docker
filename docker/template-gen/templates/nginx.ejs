@@ -1,0 +1,238 @@
+# prevent range Ddos attack
+# use proxy_set_header Range $saferange; to apply
+map $http_range $saferange {
+  "~d{10,}" "";  # if it matches a string of 10 or more integers, remove it
+  default $http_range;
+}
+
+<% if(enableSSL) { %>
+server {
+  listen 443 ssl http2;
+  listen [::]:443 ssl http2;
+  server_name <%= webDomain %>;
+
+  charset utf-8;
+  client_body_buffer_size 10K;
+  client_header_buffer_size 1k;
+  client_max_body_size 5m;
+  large_client_header_buffers 2 1k;
+
+  limit_conn conn_limit_per_ip 12;
+  limit_req zone=req_limit_per_ip_api burst=30 nodelay;
+
+  ssl_certificate /etc/nginx/certs/certificate.crt;
+  ssl_certificate_key /etc/nginx/certs/ssl-key.key;
+  <% if(enableDHParam) { %>
+  ssl_dhparam /etc/nginx/certs/dhparam.pem; 
+  <% } %>
+
+  include /etc/nginx/static-configs/ssl.conf;
+  root /var/www/app/dist;
+  
+  http2_push_preload on;
+
+  gzip_static on;
+  gzip             on;
+  gzip_min_length 4096;
+  gzip_proxied no-cache no-store private expired auth;
+  gzip_vary on;
+  gzip_disable msie6;
+  gzip_comp_level 6;
+  gzip_types
+      application/atom+xml
+      application/geo+json
+      application/javascript
+      application/x-javascript
+      application/json
+      application/ld+json
+      application/manifest+json
+      application/rdf+xml
+      application/rss+xml
+      application/vnd.ms-fontobject
+      application/wasm
+      application/x-web-app-manifest+json
+      application/xhtml+xml
+      application/xml
+      font/eot
+      font/otf
+      font/ttf
+      image/bmp
+      image/svg+xml
+      text/cache-manifest
+      text/calendar
+      text/css
+      text/javascript
+      text/markdown
+      text/plain
+      text/xml
+      text/vcard
+      text/vnd.rim.location.xloc
+      text/vtt
+      text/x-component
+      text/x-cross-domain-policy;
+  
+    brotli_static on;
+    brotli on;
+    brotli_buffers 16 8k;
+    brotli_comp_level 6;
+    brotli_min_length 4096;
+    brotli_types 
+      application/atom+xml
+      application/geo+json
+      application/javascript
+      application/x-javascript
+      application/json
+      application/ld+json
+      application/manifest+json
+      application/rdf+xml
+      application/rss+xml
+      application/vnd.ms-fontobject
+      application/wasm
+      application/x-web-app-manifest+json
+      application/xhtml+xml
+      application/xml
+      font/eot
+      font/otf
+      font/ttf
+      image/bmp
+      image/svg+xml
+      text/cache-manifest
+      text/calendar
+      text/css
+      text/javascript
+      text/markdown
+      text/plain
+      text/xml
+      text/vcard
+      text/vnd.rim.location.xloc
+      text/vtt
+      text/x-component
+      text/x-cross-domain-policy;
+
+  location ~* \.(?:jpg|jpeg|svg|gif|png|ico|css|zip|br|tgz|gz|rar|bz2|pdf|txt|tar|wav|bmp|rtf|js|flv|swf|xml|woff2|woff|js)$ {
+    access_log off;
+    expires 365d;
+    add_header Cache-Control "public, max-age=31536000, must-revalidate";
+  }
+
+  location / {
+    index index.html index.html;
+    try_files $uri $uri/ /index.html;
+  }
+
+  error_page 500 502 503 504 /50x.html;
+  location = /50x.html {
+    root /usr/share/nginx/html;
+  }
+}
+<% } %>
+
+<% if(!enableSSL) { %>
+server {
+  listen 80;
+
+  charset utf-8;
+  client_body_buffer_size 10K;
+  client_header_buffer_size 1k;
+  client_max_body_size 5m;
+  large_client_header_buffers 2 1k;
+
+  limit_conn conn_limit_per_ip 12;
+  limit_req zone=req_limit_per_ip_api burst=30 nodelay;
+  root /var/www/app/dist;
+
+  gzip_static on;
+  gzip             on;
+  gzip_min_length 4096;
+  gzip_proxied no-cache no-store private expired auth;
+  gzip_vary on;
+  gzip_disable msie6;
+  gzip_comp_level 6;
+  gzip_types
+      application/atom+xml
+      application/geo+json
+      application/javascript
+      application/x-javascript
+      application/json
+      application/ld+json
+      application/manifest+json
+      application/rdf+xml
+      application/rss+xml
+      application/vnd.ms-fontobject
+      application/wasm
+      application/x-web-app-manifest+json
+      application/xhtml+xml
+      application/xml
+      font/eot
+      font/otf
+      font/ttf
+      image/bmp
+      image/svg+xml
+      text/cache-manifest
+      text/calendar
+      text/css
+      text/javascript
+      text/markdown
+      text/plain
+      text/xml
+      text/vcard
+      text/vnd.rim.location.xloc
+      text/vtt
+      text/x-component
+      text/x-cross-domain-policy;
+  
+    brotli_static on;
+    brotli on;
+    brotli_buffers 16 8k;
+    brotli_comp_level 6;
+    brotli_min_length 4096;
+    brotli_types 
+      application/atom+xml
+      application/geo+json
+      application/javascript
+      application/x-javascript
+      application/json
+      application/ld+json
+      application/manifest+json
+      application/rdf+xml
+      application/rss+xml
+      application/vnd.ms-fontobject
+      application/wasm
+      application/x-web-app-manifest+json
+      application/xhtml+xml
+      application/xml
+      font/eot
+      font/otf
+      font/ttf
+      image/bmp
+      image/svg+xml
+      text/cache-manifest
+      text/calendar
+      text/css
+      text/javascript
+      text/markdown
+      text/plain
+      text/xml
+      text/vcard
+      text/vnd.rim.location.xloc
+      text/vtt
+      text/x-component
+      text/x-cross-domain-policy;
+
+  location ~* \.(?:jpg|jpeg|svg|gif|png|ico|css|zip|br|tgz|gz|rar|bz2|pdf|txt|tar|wav|bmp|rtf|js|flv|swf|xml|woff2|woff|js)$ {
+    access_log off;
+    expires 365d;
+    add_header Cache-Control "public, max-age=31536000, must-revalidate";
+  }
+
+  location / {
+    index index.html index.html;
+    try_files $uri $uri/ /index.html;
+  }
+
+  error_page 500 502 503 504 /50x.html;
+  location = /50x.html {
+    root /usr/share/nginx/html;
+  }
+}
+<% } %>

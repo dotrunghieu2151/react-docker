@@ -1,3 +1,1 @@
-import { test } from '@/app/libs/test';
-
-test;
+export const test = 'test132';

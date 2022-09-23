@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "render-nginx-config": "node nginx-config.js"
+  },
+  "dependencies": {
+    "ejs": "^3.1.8"
+  }
+}

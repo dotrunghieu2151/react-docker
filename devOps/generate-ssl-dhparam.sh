@@ -1,0 +1,1 @@
+openssl dhparam -out ./docker/nginx/certs/dhparam.pem 4096

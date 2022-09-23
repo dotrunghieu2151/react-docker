@@ -15,7 +15,11 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   overrides: [],
-  ignorePatterns: ['.eslintrc.js', 'webpack.config.js', 'tsconfig.json'],
+  ignorePatterns: [
+    '.eslintrc.js',
+    'webpack.*.js',
+    'tsconfig.json',
+  ],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -59,10 +63,7 @@ module.exports = {
         },
       },
     ],
-    // '@typescript-eslint/interface-name-prefix': 'off',
-    // '@typescript-eslint/explicit-function-return-type': 'off',
-    // '@typescript-eslint/explicit-module-boundary-types': 'off',
-    // '@typescript-eslint/no-explicit-any': 'off',
+    "@typescript-eslint/no-explicit-any": ["error", { "ignoreRestArgs": true }],
   },
   settings: {
     'import/resolver': {

@@ -1,39 +1,24 @@
 version: "3"
 services:
-  app:
-    build:
-      context: .
-      dockerfile: docker/nodejs/nodejs.dev.Dockerfile
-      args:
-        - PROJECT_PATH=${PROJECT_PATH:-./src}
-    restart: unless-stopped
-    volumes:
-      - ${PROJECT_PATH:-./src}:/var/www/app/src
-      - .env:/var/www/app/src/.env
-      - ./dist:/var/www/app/dist
-    env_file:
-      - .env
-    working_dir: /var/www/app/src
-
   nginx:
     build:
       context: .
-      dockerfile: docker/nginx/nginx.dev.Dockerfile
+      dockerfile: docker/nginx/nginx.prod.Dockerfile
+      args:
+        - PROJECT_PATH=${PROJECT_PATH:-./src}
     restart: unless-stopped      
     depends_on:
       - template-gen
-      - app
     volumes:
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./docker/nginx/dynamic-configs:/etc/nginx/custom_templates
       - ./docker/nginx/static-configs:/etc/nginx/static-configs
       - ./docker/nginx/certs:/etc/nginx/certs
-      - ./dist:/var/www/app/dist
     ports:
       - ${WEB_PORT_HTTPS}:443
       - ${WEB_PORT_HTTP}:80
     env_file:
-      - .env
+      - .env.prod
     working_dir: /var/www/app
   
   template-gen:
@@ -45,4 +30,4 @@ services:
       - ./docker/template-gen/templates:/var/www/app/template-gen/templates
       - ./docker/template-gen/src:/var/www/app/template-gen/src
     env_file:
-      - .env
+      - .env.prod

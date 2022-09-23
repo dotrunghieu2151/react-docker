@@ -1,3 +1,6 @@
 .env
-dist
+.env.prod
 node_modules
+dist
+/docker/nginx/certs/*
+/docker/nginx/dynamic-configs/*
